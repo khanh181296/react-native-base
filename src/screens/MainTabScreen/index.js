@@ -22,6 +22,9 @@ const NotificationStack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
+
+
+
 const MainTabScreen = () => (
   <Tab.Navigator initialRouteName="Home" activeColor="#fff">
     <Tab.Screen

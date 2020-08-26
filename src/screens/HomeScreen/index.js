@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,16 +7,18 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Button,
 } from 'react-native';
 import {
   MAIN_SCREEN,
-   STAFF_MANAGEMENT,
-   HOSPITAL_OPERATOR,
-   HOSPITAL_QUALITY,
-   MEDICAL_INCIDENT,
-   MEDICAL_EXAMINATION
-   } from 'constants/screens';
-import {useTheme} from '@react-navigation/native';
+  STAFF_MANAGEMENT,
+  HOSPITAL_OPERATOR,
+  HOSPITAL_QUALITY,
+  MEDICAL_INCIDENT,
+  MEDICAL_EXAMINATION,
+} from 'constants/screens';
+import { useTheme } from '@react-navigation/native';
+import Modal from 'react-native-modal';
 
 import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,18 +26,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
       <View style={styles.sliderContainer}>
-        <Swiper
-          autoplay
-          horizontal={false}
-          height={200}
-          activeDotColor="#FF6347">
+        <Swiper autoplay horizontal={false} height={200} activeDotColor="#FF6347">
           <View style={styles.slide}>
             <Image
               source={require('../../assets/banners/banner_1.jpg')}
@@ -63,61 +64,70 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}
-          onPress={() =>
-            navigation.navigate(STAFF_MANAGEMENT)
-          }>
+          onPress={() => navigation.navigate(STAFF_MANAGEMENT)}
+          onLongPress={() => {
+            setModalVisible(true);
+          }}>
           <View style={styles.categoryIcon}>
-          <Image style={styles.cardImage}
-              source={require('../../assets/icons/canbo.png')}
-            />
+            <Image style={styles.cardImage} source={require('../../assets/icons/canbo.png')} />
           </View>
           <Text style={styles.categoryBtnTxt}>Quản lý cán bộ</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryBtn}  onPress={() =>
-            navigation.navigate(MEDICAL_INCIDENT)
-          }>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => navigation.navigate(MEDICAL_INCIDENT)}>
           <View style={styles.categoryIcon}>
-          <Image style={styles.cardImage}
-              source={require('../../assets/icons/ykhoa.png')}
-            />
+            <Image style={styles.cardImage} source={require('../../assets/icons/ykhoa.png')} />
           </View>
           <Text style={styles.categoryBtnTxt}>Sự cố y khoa</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryBtn}  onPress={() =>
-            navigation.navigate(MEDICAL_EXAMINATION)
-          }>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => navigation.navigate(MEDICAL_EXAMINATION)}>
           <View style={styles.categoryIcon}>
-            <Image style={styles.cardImage}
-              source={require('../../assets/icons/khambenh.png')}
-            />
+            <Image style={styles.cardImage} source={require('../../assets/icons/khambenh.png')} />
           </View>
           <Text style={styles.categoryBtnTxt}>Khám Bệnh</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.categoryContainer, {marginTop: 10}]}>
-      <TouchableOpacity
+      <View style={[styles.categoryContainer, { marginTop: 10 }]}>
+        <TouchableOpacity
           style={styles.categoryBtn}
-          onPress={() =>
-            navigation.navigate(HOSPITAL_OPERATOR)
-          }>
+          onPress={() => navigation.navigate(HOSPITAL_OPERATOR)}>
           <View style={styles.categoryIcon}>
-          <Image style={styles.cardImage}
-              source={require('../../assets/icons/benhvien.png')}
-            />
+            <Image style={styles.cardImage} source={require('../../assets/icons/benhvien.png')} />
           </View>
           <Text style={styles.categoryBtnTxt}>Điều hành bệnh viện</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryBtn} onPress={() =>
-            navigation.navigate(HOSPITAL_QUALITY)
-          }>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => navigation.navigate(HOSPITAL_QUALITY)}>
           <View style={styles.categoryIcon}>
-          <Image style={styles.cardImage}
-              source={require('../../assets/icons/chatluong.png')}
-            />
+            <Image style={styles.cardImage} source={require('../../assets/icons/chatluong.png')} />
           </View>
           <Text style={styles.categoryBtnTxt}>Chất Lượng bệnh viện</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        isVisible={isModalVisible}
+        contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: '100%', height: 200, backgroundColor: 'white' }}>
+          <Button
+            title="MedicalExaminationList"
+            onPress={() => {
+              toggleModal();
+              navigation.navigate('MedicalExaminationList');
+            }}
+          />
+          <Button
+            title="MedicalExaminationUpdate"
+            onPress={() => {
+              toggleModal();
+              navigation.navigate('MedicalExaminationUpdate');
+            }}
+          />
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -137,9 +147,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cardImage: {
-       height: 70,
-      width: 70,
-      alignSelf: 'center',
+    height: 70,
+    width: 70,
+    alignSelf: 'center',
   },
 
   wrapper: {},
@@ -194,7 +204,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: 'row',
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
